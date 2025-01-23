@@ -1,10 +1,8 @@
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import { Link, Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PaymentDetailsForm from "@/components/PaymentDetailsForm";
 import CardWrapper from "@/components/CardWrapper";
-import CheckoutForm from "@/components/CheckoutForm";
 import CompletePage from "@/components/CompletePage";
 import ProtectedCheckoutPage from "../ProtectedCheckoutPage";
 
