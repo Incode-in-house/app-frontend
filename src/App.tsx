@@ -1,5 +1,6 @@
-import MainWrapper from "@/components/MainWrapper";
-import Layout from "@/components/Layout";
+import React from "react";
+import MainWrapper from "./components/MainWrapper";
+import Layout from "./components/Layout";
 
 function App() {
   return (

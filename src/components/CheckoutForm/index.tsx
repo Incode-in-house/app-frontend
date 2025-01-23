@@ -20,13 +20,14 @@ function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${import.meta.env.VITE_BASE_URL}/complete`,
+        return_url: `${window.location.origin}/complete`,
       },
     });
 
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.message as string);
     } else {
+      console.log(error);
       setMessage("An unexpected error occurred.");
     }
 

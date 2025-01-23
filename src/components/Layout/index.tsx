@@ -1,9 +1,9 @@
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import PaymentDetailsForm from "@/components/PaymentDetailsForm";
-import CardWrapper from "@/components/CardWrapper";
-import CompletePage from "@/components/CompletePage";
+import PaymentDetailsForm from "../PaymentDetailsForm";
+import CardWrapper from "../CardWrapper";
+import CompletePage from "../CompletePage";
 import ProtectedCheckoutPage from "../ProtectedCheckoutPage";
 
 export default function Layout() {
@@ -11,7 +11,7 @@ export default function Layout() {
   const [clientSecret, setClientSecret] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY)
+    loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY as string)
       .then((data) => setStripe(data))
       .catch((err) => console.log("Error loading Stripe:", err));
   }, []);

@@ -1,8 +1,8 @@
 import React from "react";
-import Input from "@/components/Input";
+import Input from "../../components/Input";
 import SubmitButton from "../SubmitButton";
 import axios from "axios";
-import { CREATE_PAYMENT } from "@/endpoints";
+import { CREATE_PAYMENT } from "../../endpoints";
 import CountrySelector from "../CountrySelector";
 import { useNavigate } from "react-router-dom";
 

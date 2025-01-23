@@ -1,5 +1,5 @@
 import React from "react";
-import ArrowBottomIcon from "@/assets/icons/arrow-bottom.svg?react";
+import { ReactComponent as ArrowBottomIcon } from "../../assets/icons/arrow-bottom.svg";
 
 export interface CountrySelectorProps {
   selectedCountry: string;
