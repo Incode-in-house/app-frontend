@@ -17,8 +17,6 @@ function CheckoutForm() {
 
     setIsLoading(true);
 
-    console.log("submit");
-
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -42,7 +40,11 @@ function CheckoutForm() {
         <span id="button-text">{isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}</span>
       </SubmitButton>
 
-      {message && <div id="payment-message">{message}</div>}
+      {message && (
+        <p className="text-red-500 mt-1" id="payment-message">
+          {message}
+        </p>
+      )}
     </form>
   );
 }

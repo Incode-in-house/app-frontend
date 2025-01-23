@@ -10,13 +10,20 @@ export default function CountrySelector({ selectedCountry, setSelectedCountry }:
   const [countries, setCountries] = React.useState<string[]>([]);
 
   React.useEffect(() => {
+    const userLocale = navigator.language || "en-US";
+    const userCountry = new Intl.DisplayNames([userLocale], { type: "region" })
+      .of(userLocale.split("-")[1]?.toUpperCase() || "")
+      ?.toString();
+
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
       .then((data) => {
         const countryNames = data.map((country: { name: { common: string } }) => country.name.common).sort();
 
+        const defaultCountry =
+          userCountry && countryNames.includes(userCountry) ? userCountry : countryNames[0];
+        setSelectedCountry(defaultCountry);
         setCountries(countryNames);
-        setSelectedCountry(countryNames[0]);
       })
       .catch((error) => console.error("Error fetching countries:", error));
   }, [setSelectedCountry]);

@@ -14,6 +14,8 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
   const [amount, setAmount] = React.useState("");
   const [country, setCountry] = React.useState("");
   const navigate = useNavigate();
+  const [amountErrorMessage, setAmountErrorMessage] = React.useState<string | null>(null);
+  const [countryErrorMessage, setCountryErrorMessage] = React.useState<string | null>(null);
 
   const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -21,6 +23,11 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (!amount) {
+      return setAmountErrorMessage("Amount is required");
+    }
+    if (!country) return setCountryErrorMessage("Country is required");
 
     if (amount && country) {
       axios
@@ -38,11 +45,13 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
       <label>
         Amount (in cents):
         <Input type="number" value={amount} placeholder="Input amount" onChange={onChangeAmount} />
+        {amountErrorMessage && <p className="text-red-500">{amountErrorMessage}</p>}
       </label>
 
       <div className="mt-3 flex flex-col">
         <label htmlFor="payment-card-layout-country">Country</label>
         <CountrySelector selectedCountry={country} setSelectedCountry={setCountry} />
+        {countryErrorMessage && <p className="text-red-500">{countryErrorMessage}</p>}
       </div>
 
       <div className="mt-6">
