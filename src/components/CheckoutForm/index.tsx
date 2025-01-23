@@ -37,7 +37,7 @@ function CheckoutForm() {
     <form onSubmit={handleSubmit}>
       <PaymentElement id="checkout-form-payment-element" />
       <SubmitButton className="mt-6" disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">{isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}</span>
+        Pay now
       </SubmitButton>
 
       {message && (
