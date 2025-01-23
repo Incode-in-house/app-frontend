@@ -3,8 +3,8 @@ import Input from "../../components/Input";
 import SubmitButton from "../SubmitButton";
 import axios from "axios";
 import { CREATE_PAYMENT } from "../../endpoints";
-import CountrySelector from "../CountrySelector";
 import { useNavigate } from "react-router-dom";
+import { dollarsToCents } from "../../utils/dollarsToCents";
 
 interface PaymentDetailsFormProps {
   setClientSecret: React.Dispatch<React.SetStateAction<string | null>>;
@@ -12,10 +12,8 @@ interface PaymentDetailsFormProps {
 
 export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFormProps) {
   const [amount, setAmount] = React.useState("");
-  const [country, setCountry] = React.useState("");
   const navigate = useNavigate();
   const [amountErrorMessage, setAmountErrorMessage] = React.useState<string | null>(null);
-  const [countryErrorMessage, setCountryErrorMessage] = React.useState<string | null>(null);
 
   const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -27,11 +25,12 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
     if (!amount) {
       return setAmountErrorMessage("Amount is required");
     }
-    if (!country) return setCountryErrorMessage("Country is required");
 
-    if (amount && country) {
+    const amountInCents = dollarsToCents(Number(amount));
+
+    if (amount) {
       axios
-        .post(CREATE_PAYMENT, { amount, country })
+        .post(CREATE_PAYMENT, { amount: amountInCents, country: "test country" })
         .then(({ data }) => {
           setClientSecret(data.clientSecret);
           navigate("/checkout");
@@ -41,18 +40,13 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="" onSubmit={handleSubmit}>
+      <h1 className="text-center font-bold text-3xl mb-6">Payment details</h1>
       <label>
-        Amount (in cents):
+        <span className="">Amount ($):</span>
         <Input type="number" value={amount} placeholder="Input amount" onChange={onChangeAmount} />
         {amountErrorMessage && <p className="text-red-500">{amountErrorMessage}</p>}
       </label>
-
-      <div className="mt-3 flex flex-col">
-        <label htmlFor="payment-card-layout-country">Country</label>
-        <CountrySelector selectedCountry={country} setSelectedCountry={setCountry} />
-        {countryErrorMessage && <p className="text-red-500">{countryErrorMessage}</p>}
-      </div>
 
       <div className="mt-6">
         <SubmitButton>Create Payment</SubmitButton>
