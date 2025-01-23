@@ -12,4 +12,5 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.VITE_API_PORT, 10) || 3000,
   },
+  base: "/app-frontend",
 });
