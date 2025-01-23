@@ -1,3 +1,1 @@
-const BASE_URL = "http://localhost:3001";
-
-export const CREATE_PAYMENT = BASE_URL + "/api/payment/create";
+export const CREATE_PAYMENT = process.env.REACT_APP_BACKEND_BASE_URL + "/api/payment/create";
