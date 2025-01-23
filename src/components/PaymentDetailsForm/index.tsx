@@ -14,6 +14,7 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
   const [amount, setAmount] = React.useState("");
   const navigate = useNavigate();
   const [amountErrorMessage, setAmountErrorMessage] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -28,14 +29,18 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
 
     const amountInCents = dollarsToCents(Number(amount));
 
-    if (amount) {
+    if (amountInCents) {
+      setIsLoading(true);
       axios
         .post(CREATE_PAYMENT, { amount: amountInCents, country: "test country" })
         .then(({ data }) => {
           setClientSecret(data.clientSecret);
           navigate("/checkout");
         })
-        .catch((err) => console.error("Error fetching clientSecret:", err));
+        .catch((err) => console.error("Error fetching clientSecret:", err))
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
 
@@ -49,7 +54,7 @@ export default function PaymentDetailsForm({ setClientSecret }: PaymentDetailsFo
       </label>
 
       <div className="mt-6">
-        <SubmitButton>Create Payment</SubmitButton>
+        <SubmitButton disabled={isLoading}>Create Payment</SubmitButton>
       </div>
     </form>
   );
