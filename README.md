@@ -1,13 +1,13 @@
----
-
 ### App Description
 
 #### General Structure
+
 - A simple web application with three pages.
 - Uses `HashRouter` from the `react-router-dom` library to support nested routes and work on GitHub Pages.
 - All pages are wrapped in a `CardWrapper` component, which centers the content in a card layout.
 
 #### Stripe Integration
+
 - The following libraries are used for Stripe integration:
   - `@stripe/react-stripe-js`
   - `@stripe/stripe-js`
@@ -64,7 +64,3 @@
 - For test credit cards in Stripe, use [official test cards](https://stripe.com/docs/testing).
 
 ---
-
-```
-
-```
