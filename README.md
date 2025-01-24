@@ -1,50 +1,70 @@
-# React + TypeScript + Vite
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### App Description
 
-Currently, two official plugins are available:
+#### General Structure
+- A simple web application with three pages.
+- Uses `HashRouter` from the `react-router-dom` library to support nested routes and work on GitHub Pages.
+- All pages are wrapped in a `CardWrapper` component, which centers the content in a card layout.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### Stripe Integration
+- The following libraries are used for Stripe integration:
+  - `@stripe/react-stripe-js`
+  - `@stripe/stripe-js`
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### App Pages
 
-- Configure the top-level `parserOptions` property like this:
+#### **1. Payment Creation Page**
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Purpose**: Input the amount (`amount` in USD) and create a payment through the backend.
+- **User Actions**:
+  1. Input the amount.
+  2. Click the "Submit" button.
+- **Workflow**:
+  - The entered amount in USD is converted into cents.
+  - Data in the format `{ amount: number, country: string }` (where:
+    - `amount` — the amount in cents.
+    - `country` — a test string for metadata)
+      is sent to the backend endpoint:  
+      **`POST baseurl/api/payment/create`**,  
+      where `baseurl` is read from the `.env` variable `REACT_APP_BACKEND_BASE_URL`.
+  - On a successful request, the app redirects to the next page using `useNavigate` from `react-router-dom`.
+
+---
+
+#### **2. Payment Details Page**
+
+- **Purpose**: Select the payment method and process the payment through Stripe.
+- **Stripe Components**:
+  - Wrapper: `Elements`.
+  - Main Component: `PaymentElement`.
+- **Validation**: Each field is validated as implemented in Stripe Elements.
+- **Workflow**:
+  - After completing the form fields, a request is made using `stripe.confirmPayment` with the following parameters:
+    - `confirmParams`: An object with the key `return_url`, which specifies the URL for redirecting after completing the payment.
+  - The response includes:
+    - On successful payment — an automatic redirect to `return_url`.
+    - On failure — an error object, which is used to display additional information in the UI.
+
+---
+
+#### **3. Payment Completion Page**
+
+- **Purpose**: Display the status of a successful payment.
+- **Content**: A simple message confirming that the payment was successful!
+
+---
+
+### Additional Notes
+
+- Ensure the `.env` file includes valid `REACT_APP_BACKEND_BASE_URL` and `REACT_APP_STRIPE_PUB_KEY` values.
+- When testing in the Stripe sandbox, verify the `Elements` configuration and error handling during `stripe.confirmPayment`.
+- For test credit cards in Stripe, use [official test cards](https://stripe.com/docs/testing).
+
+---
+
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
 ```
